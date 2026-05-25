@@ -1,0 +1,43 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* -----------------------------
+   BRAND DESIGN UTILITIES
+------------------------------ */
+
+@layer utilities {
+
+  .bg-brand-gradient {
+    background: linear-gradient(
+      135deg,
+      #243B7B 0%,
+      #1E3A8A 50%,
+      #8BC34A 100%
+    );
+  }
+
+  .glass-card {
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .text-brand-gradient {
+    background: linear-gradient(135deg, #243B7B, #8BC34A);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .btn-primary {
+    background: linear-gradient(135deg, #243B7B, #1E3A8A);
+    color: white;
+    transition: all 0.3s ease;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    opacity: 0.95;
+  }
+}
