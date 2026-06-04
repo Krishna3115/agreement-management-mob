@@ -226,7 +226,7 @@ function CompanyDetailModal({
         {/* HEADER */}
         <div
           className="px-5 py-5 text-white"
-          style={{ background: PRIMARY }}
+          style={{ background: 'linear-gradient(135deg,#008d5b,#00663f)' }}
         >
           <div className="flex items-start justify-between">
             <div>
@@ -473,7 +473,7 @@ function RegisterSheet({
         {/* HEADER */}
         <div
           className="px-5 py-5 text-white"
-          style={{ background: PRIMARY }}
+          style={{ background: 'linear-gradient(135deg,#008d5b,#00663f)' }}
         >
           <div className="flex items-center justify-between">
 
@@ -671,7 +671,7 @@ function RegisterSheet({
             <button
               onClick={handleNext}
               className="flex-1 py-3 rounded-2xl text-white font-semibold"
-              style={{ background: PRIMARY }}
+              style={{ background: 'linear-gradient(135deg,#008d5b,#00663f)' }}
             >
               Next
             </button>
@@ -680,7 +680,7 @@ function RegisterSheet({
               onClick={handleSubmit}
               disabled={saving}
               className="flex-1 py-3 rounded-2xl text-white font-semibold flex items-center justify-center gap-2"
-              style={{ background: PRIMARY }}
+              style={{ background: 'linear-gradient(135deg,#008d5b,#00663f)' }}
             >
               {saving ? (
                 <>
@@ -771,28 +771,34 @@ export default function CompaniesPage() {
   });
 
   return (
-    <div className="min-h-screen bg-slate-50 pb-24">
+    <div className="min-h-screen pb-24" style={{ background: 'linear-gradient(180deg,#eefaf3 0%,#f6f9f7 22%,#f8fafc 100%)' }}>
 
       {/* HEADER */}
       <div
-        className="px-4 pt-5 pb-6 rounded-b-[30px]"
-        style={{ background: PRIMARY }}
+        className="relative overflow-hidden px-4 pt-6 pb-7 text-white"
+        style={{
+          background: 'linear-gradient(135deg, #008d5b 0%, #00663f 100%)',
+          borderBottomLeftRadius: 34, borderBottomRightRadius: 34,
+        }}
       >
-        <div className="flex items-center justify-between">
+        {/* glow accents */}
+        <div className="pointer-events-none absolute -top-16 -right-10 w-52 h-52 rounded-full opacity-20"
+          style={{ background: 'radial-gradient(circle,#9bffd0,transparent 70%)' }} />
+        <div className="pointer-events-none absolute -bottom-20 -left-8 w-48 h-48 rounded-full opacity-10"
+          style={{ background: 'radial-gradient(circle,#ffffff,transparent 70%)' }} />
 
+        <div className="relative flex items-center justify-between">
           <div>
-            <h1 className="text-2xl font-bold text-white">
-              Companies
-            </h1>
-
-            <p className="text-white/80 text-sm mt-1">
+            <p className="text-white/70 text-[11px] font-medium tracking-wide uppercase">Exponab</p>
+            <h1 className="text-2xl font-bold leading-tight mt-0.5">Companies</h1>
+            <p className="text-white/80 text-xs mt-1">
               {companies.length} registered companies
             </p>
           </div>
 
           <button
             onClick={() => setShowForm(true)}
-            className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg"
+            className="w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg active:scale-95 transition"
           >
             <Plus size={22} color={PRIMARY} />
           </button>
@@ -809,7 +815,7 @@ export default function CompaniesPage() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search company..."
-            className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white text-sm focus:outline-none"
+            className="w-full pl-12 pr-4 py-4 rounded-2xl bg-white text-sm shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-200"
           />
         </div>
       </div>
@@ -841,19 +847,19 @@ export default function CompaniesPage() {
             <button
               key={c.id}
               onClick={() => setViewCompany(c)}
-              className="w-full bg-white rounded-3xl p-4 shadow-sm border border-slate-100 active:scale-[0.99]"
+              className="w-full bg-white rounded-3xl p-4 border border-slate-100 shadow-[0_10px_40px_-12px_rgba(0,80,50,0.18)] active:scale-[0.99] transition"
             >
               <div className="flex gap-4">
 
                 <div
-                  className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0"
+                  className="w-14 h-14 rounded-2xl flex items-center justify-center shrink-0 text-white shadow-[0_6px_16px_-6px_rgba(0,141,91,0.6)]"
                   style={{
-                    background: '#e6f6f0',
+                    background: 'linear-gradient(135deg,#008d5b,#00663f)',
                   }}
                 >
                   <Building2
                     size={22}
-                    color={PRIMARY}
+                    color="#ffffff"
                   />
                 </div>
 
@@ -921,8 +927,8 @@ export default function CompaniesPage() {
       {/* FLOATING REFRESH */}
       <button
         onClick={fetchCompanies}
-        className="fixed bottom-24 right-5 w-14 h-14 rounded-full shadow-2xl text-white flex items-center justify-center"
-        style={{ background: PRIMARY }}
+        className="fixed bottom-24 right-5 w-14 h-14 rounded-full shadow-2xl text-white flex items-center justify-center active:scale-95 transition"
+        style={{ background: 'linear-gradient(135deg,#008d5b,#00663f)' }}
       >
         <RefreshCw size={20} />
       </button>

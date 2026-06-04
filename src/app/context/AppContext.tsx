@@ -65,35 +65,49 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
 
   // Call real login API, store JWT token on success
   const login = async (username: string, password: string): Promise<boolean> => {
-    try {
-      console.log('🔐 Calling login API...');
-      const response = await api.post('/api/auth/login', { username, password });
-      const data = response.data;
-      console.log('✅ Login response:', data);
+  try {
+    console.log('🔐 Calling login API...');
+    const response = await api.post('/api/auth/login', { username, password });
+    const data = response.data;
+    console.log('✅ Login response:', data);
 
-      // Handle all response shapes:
-      // { token }, { accessToken }, { data: 'jwt...' }, { data: { token } }, { data: { accessToken } }
-      const token =
-        data.token ??
-        data.accessToken ??
-        (typeof data.data === 'string' ? data.data : null) ??
-        data.data?.token ??
-        data.data?.accessToken;
+    const token =
+      data.token ??
+      data.accessToken ??
+      (typeof data.data === 'string' ? data.data : null) ??
+      data.data?.token ??
+      data.data?.accessToken;
 
-      if (token) {
+if (token) {
         localStorage.setItem('jwt_token', token);
+
+        // Decode the role from the JWT so we can route owner vs salesperson.
+        // (Backend must include a "roles" claim — see JwtService fix.)
+        try {
+          const payload = JSON.parse(atob(token.split('.')[1]));
+          const roles: string[] = payload.roles || [];
+          if (roles.includes('ROLE_ADMIN')) {
+            localStorage.setItem('user_role', 'ADMIN');
+          } else if (roles.includes('ROLE_SALESPERSON')) {
+            localStorage.setItem('user_role', 'SALESPERSON');
+          }
+        } catch (e) {
+          console.warn('Could not decode role from token', e);
+        }
+
         setIsAuthenticated(true);
         return true;
       }
       return false;
-    } catch (err: any) {
-      console.error('❌ Login failed:', err?.response?.data || err.message);
-      return false;
-    }
-  };
+  } catch (err: any) {
+    console.error('❌ Login failed:', err?.response?.data || err.message);
+    return false;
+  }
+};
 
   const logout = () => {
     localStorage.removeItem('jwt_token');
+    localStorage.removeItem('user_role');
     setIsAuthenticated(false);
     setCompanies([]);
   };

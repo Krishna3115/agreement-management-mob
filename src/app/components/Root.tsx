@@ -11,13 +11,13 @@ const navItems = [
 
   { to: '/companies', label: 'Companies', icon: Building2 },
 
-  { to: '/proposals', label: 'Proposal', icon: ClipboardList },
+ // { to: '/proposals', label: 'Proposal', icon: ClipboardList },
 
   // NEW
   { to: '/purchase-orders', label: 'PO', icon: FileText },
 
   // NEW
-  { to: '/material-receiving', label: 'Material', icon: FileCheck },
+//  { to: '/material-receiving', label: 'Material', icon: FileCheck },
 
   // Replace quotation with Sales Report
   { to: '/sales-reports', label: 'Sales', icon: Receipt },

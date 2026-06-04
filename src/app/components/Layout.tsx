@@ -2,13 +2,15 @@ import React from 'react';
 import { NavLink, useNavigate, Outlet, useLocation } from 'react-router';
 import {
   LayoutDashboard, Building2, FileText, FileCheck, Receipt,
-  Bell, User, TrendingUp, ChevronLeft,
+  Bell, User, Leaf,
 } from 'lucide-react';
 import { useApp } from '../context/AppContext';
 
+const PRIMARY = '#008d5b';
+const PRIMARY_DARK = '#00663f';
+
 const navItems = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard, end: true },
-  
   { to: '/companies', label: 'Companies', icon: Building2 },
   { to: '/quotations', label: 'Quotes', icon: FileText },
   { to: '/agreements', label: 'Agreements', icon: FileCheck },
@@ -19,9 +21,13 @@ const pageTitles: Record<string, string> = {
   '/': 'Dashboard',
   '/companies': 'Companies',
   '/quotations': 'Quotations',
-  '/purchaseorder': 'PurchaseOrder',
+  '/purchase-orders': 'Purchase Orders',
   '/agreements': 'Agreements',
   '/invoices': 'Invoices',
+  '/sales-reports': 'Sales Reports',
+  '/sales-orders': 'Sales Order',
+  '/price-list': 'Price List',
+  '/material-receiving': 'Material Receiving',
 };
 
 export default function Layout() {
@@ -29,29 +35,40 @@ export default function Layout() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const title = pageTitles[location.pathname] ?? 'TechCorp';
+  const title = pageTitles[location.pathname] ?? 'Exponab';
 
   return (
-    <div className="flex flex-col h-screen bg-slate-50 overflow-hidden">
+    <div className="flex flex-col h-screen overflow-hidden"
+      style={{ background: 'linear-gradient(180deg,#eefaf3 0%,#f6f9f7 22%,#f8fafc 100%)' }}>
+
       {/* Top Header */}
       <header
-        className="shrink-0 flex items-center justify-between px-4 pt-safe"
-        style={{ background: '#085b39', height: 56 }}
+        className="shrink-0 relative overflow-hidden flex items-center justify-between px-4 pt-safe text-white"
+        style={{ background: `linear-gradient(135deg, ${PRIMARY} 0%, ${PRIMARY_DARK} 100%)`, height: 60 }}
       >
-        <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-blue-500 flex items-center justify-center">
-            <TrendingUp size={14} className="text-white" />
+        {/* subtle glow */}
+        <div className="pointer-events-none absolute -top-10 right-10 w-32 h-32 rounded-full opacity-20"
+          style={{ background: 'radial-gradient(circle,#9bffd0,transparent 70%)' }} />
+
+        <div className="relative flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-xl flex items-center justify-center border border-white/20"
+            style={{ background: 'rgba(255,255,255,0.15)' }}>
+            <Leaf size={16} className="text-emerald-100" />
           </div>
-          <span className="text-white text-sm font-semibold">{title}</span>
+          <div className="leading-tight">
+            <p className="text-[9px] text-white/60 uppercase tracking-wider font-semibold">Exponab</p>
+            <span className="text-white text-sm font-bold">{title}</span>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button className="relative w-9 h-9 flex items-center justify-center rounded-full bg-white/10 active:bg-white/20">
+
+        <div className="relative flex items-center gap-2">
+          <button className="relative w-9 h-9 flex items-center justify-center rounded-full bg-white/15 active:bg-white/25 transition">
             <Bell size={16} className="text-white" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-400 rounded-full border border-[#0c1e3d]"></span>
+            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-amber-300 rounded-full border border-emerald-900"></span>
           </button>
           <button
             onClick={() => { logout(); navigate('/login'); }}
-            className="w-9 h-9 flex items-center justify-center rounded-full bg-blue-500"
+            className="w-9 h-9 flex items-center justify-center rounded-full bg-white/15 active:bg-white/25 transition"
           >
             <User size={15} className="text-white" />
           </button>
@@ -59,37 +76,37 @@ export default function Layout() {
       </header>
 
       {/* Page content */}
-      <main className="flex-1 overflow-y-auto pb-20">
+      <main className="flex-1 overflow-y-auto pb-24">
         <Outlet />
       </main>
 
       {/* Bottom Navigation */}
       <nav
-        className="shrink-0 fixed bottom-0 left-0 right-0 bg-white border-t border-slate-200 z-40 pb-safe"
-        style={{ boxShadow: '0 -2px 12px rgba(0,0,0,0.08)' }}
+        className="shrink-0 fixed bottom-0 left-0 right-0 z-40 pb-safe px-3"
+        style={{ paddingBottom: 'calc(env(safe-area-inset-bottom,0) + 0.5rem)' }}
       >
-        <div className="flex items-center h-16">
-          {navItems.map(({ to, label, icon: Icon, end }) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={end}
-              className={({ isActive }) =>
-                `flex-1 flex flex-col items-center justify-center gap-0.5 py-2 transition-colors ${
-                  isActive ? 'text-blue-600' : 'text-slate-400 active:text-slate-600'
-                }`
-              }
-            >
-              {({ isActive }) => (
-                <>
-                  <div className={`w-10 h-6 flex items-center justify-center rounded-full transition-all ${isActive ? 'bg-blue-50' : ''}`}>
-                    <Icon size={18} />
-                  </div>
-                  <span className="text-[10px] font-medium leading-none">{label}</span>
-                </>
-              )}
-            </NavLink>
-          ))}
+        <div className="mx-auto max-w-md bg-white/90 backdrop-blur-xl border border-slate-200/70 rounded-[24px] shadow-[0_8px_30px_-6px_rgba(0,60,40,0.25)]">
+          <div className="flex items-center h-16">
+            {navItems.map(({ to, label, icon: Icon, end }) => (
+              <NavLink
+                key={to}
+                to={to}
+                end={end}
+                className="flex-1 flex flex-col items-center justify-center gap-1 py-2 transition active:scale-90"
+              >
+                {({ isActive }) => (
+                  <>
+                    <div className="w-11 h-8 flex items-center justify-center rounded-2xl transition-all"
+                      style={isActive ? { background: 'rgba(0,141,91,0.12)', color: PRIMARY } : { color: '#94a3b8' }}>
+                      <Icon size={18} />
+                    </div>
+                    <span className="text-[10px] font-bold leading-none"
+                      style={{ color: isActive ? PRIMARY : '#94a3b8' }}>{label}</span>
+                  </>
+                )}
+              </NavLink>
+            ))}
+          </div>
         </div>
       </nav>
     </div>

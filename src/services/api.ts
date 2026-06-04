@@ -1,9 +1,10 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080",
+  baseURL: import.meta.env.VITE_API_BASE_URL || "http://localhost:8080/",
   headers: {
     "Content-Type": "application/json",
+    "ngrok-skip-browser-warning": "true"
   },
 });
 
@@ -20,13 +21,17 @@ api.interceptors.request.use((config) => {
 
 // handle 401
 api.interceptors.response.use(
-  (res) => res,
-  (err) => {
-    if (err.response?.status === 401) {
-      localStorage.removeItem("jwt_token");
-      window.location.href = "/";
+  (response) => response,
+  (error) => {
+    if (error?.response?.status === 401) {
+      localStorage.removeItem('jwt_token');
+      localStorage.removeItem('user_role');
+      // send them to login
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login';
+      }
     }
-    return Promise.reject(err);
+    return Promise.reject(error);
   }
 );
 
