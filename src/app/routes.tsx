@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBrowserRouter, Navigate } from 'react-router';
 import Root from './components/Root';
+import SalespersonRoot from './components/SalespersonRoot';
 import LoginPage from './pages/LoginPage';
 import DashboardPage from './pages/DashboardPage';
 import CompaniesPage from './pages/CompaniesPage';
@@ -14,9 +15,17 @@ import MaterialReceivingEntryPage from './pages/MaterialReceivingEntryPage';
 import SalesOrderPage from './pages/SalesOrderPage';
 import SalesReportListPage from './pages/SalesReportListPage';
 import PriceListPage from './pages/PriceListPage';
-// ─── Auth Guard ───────────────────────────────────────────────────────────────
-// If not authenticated → redirect to /login.
-// If authenticated → render the child layout normally.
+
+
+
+// ─── Field Sales / Invoice module pages ────────────────────────────
+import SalespersonHome from './pages/field/SalespersonHome';
+import ManageSalespeople from './pages/field/ManageSalespeople';
+import ManageContainers from './pages/field/ManageContainers';
+import FieldReports from './pages/field/FieldReports';
+
+import AdminfieldOps from './pages/AdminfieldOps';
+// ─── Auth Guard ─────────────────────────────────────────────────────
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useApp();
   if (!isAuthenticated) {
@@ -25,19 +34,40 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// ─── Owner-only shell guard ─────────────────────────────────────────
+// If a salesperson somehow lands on the owner area, push them to their app.
+function OwnerArea({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useApp();
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  const role = localStorage.getItem('user_role');
+  if (role === 'SALESPERSON') return <Navigate to="/field/sales" replace />;
+  return <>{children}</>;
+}
+
+// ─── Salesperson-area guard ─────────────────────────────────────────
+// Owners can still open it if they navigate manually, but unauthenticated
+// users are bounced to login.
+function SalesArea({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useApp();
+  if (!isAuthenticated) return <Navigate to="/login" replace />;
+  return <>{children}</>;
+}
+
 export const router = createBrowserRouter([
   {
-    // Public route — accessible without login
     path: '/login',
     Component: LoginPage,
   },
+
+  // ════════════════════════════════════════════════════════════
+  // OWNER AREA — wrapped in the owner Root (header + owner bottom nav)
+  // ════════════════════════════════════════════════════════════
   {
-    // All app routes are protected behind RequireAuth
     path: '/',
     element: (
-      <RequireAuth>
+      <OwnerArea>
         <Root />
-      </RequireAuth>
+      </OwnerArea>
     ),
     children: [
       { index: true, Component: DashboardPage },
@@ -51,10 +81,32 @@ export const router = createBrowserRouter([
       { path: 'sales-orders', Component: SalesOrderPage },
       { path: 'sales-reports', Component: SalesReportListPage },
       { path: 'price-list', Component: PriceListPage },
+
+      // Owner-only field management pages (live inside owner shell)
+      { path: 'field/salespeople', Component: ManageSalespeople },
+      { path: 'field/containers',  Component: ManageContainers },
+      { path: 'field/reports',     Component: FieldReports },
+     // { path: 'field/admin',       Component: AdminfieldOps },
+      { path: 'field/operations', Component: AdminfieldOps },
     ],
   },
+
+  // ════════════════════════════════════════════════════════════
+  // SALESPERSON AREA — completely separate shell, NO owner navbar
+  // ════════════════════════════════════════════════════════════
   {
-    // Any unknown path → go to login
+    path: '/field',
+    element: (
+      <SalesArea>
+        <SalespersonRoot />
+      </SalesArea>
+    ),
+    children: [
+      { path: 'sales', Component: SalespersonHome },
+    ],
+  },
+
+  {
     path: '*',
     element: <Navigate to="/login" replace />,
   },
