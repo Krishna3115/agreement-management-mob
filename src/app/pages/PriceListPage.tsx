@@ -23,7 +23,7 @@ const POSTER_H = 1350;
 
 export default function PriceListPage() {
   const posterRef = useRef<HTMLDivElement>(null);
-  const [date] = useState(new Date().toLocaleDateString());
+  const [date] = useState(new Date().toLocaleDateString("en-GB"));
 
   const [data, setData] = useState<CountryBlock[]>([
     { country: "", products: [{ name: "", price: "", quantity: "" }] },
