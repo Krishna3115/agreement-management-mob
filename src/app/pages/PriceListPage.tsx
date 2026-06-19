@@ -198,7 +198,7 @@ export default function PriceListPage() {
           {/* LETTERHEAD BACKGROUND — fills the matched-ratio box exactly,
               so it is never squished. Its own leaf watermark shows through. */}
           <img
-            src="/letterheadexponab.jpg"
+            src="public/letterheadexponab.png"
             alt="letterhead"
             className="absolute inset-0 w-full h-full object-cover z-0"
           />
@@ -216,6 +216,24 @@ export default function PriceListPage() {
           >
             {/* TITLE */}
             <div className="text-center mb-12">
+            <h2
+                style={{
+                  fontSize: "25px",
+                  fontWeight: 500,
+                  color: "#111827",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "12px",
+                }}
+              >
+                <img
+                  src="public/uae-flag.png"
+                  alt="UAE"
+                  style={{ width: "30px", height: "30px" }}
+                />
+                Al Aweer Fruits & Vegetables Market, Dubai
+              </h2>
               <h1 style={{ fontSize: "42px", fontWeight: 700, color: "#111827" }}>DAILY PRICE LIST</h1>
               <p style={{ fontSize: "24px", marginTop: "10px", color: "#4b5563" }}>{date}</p>
             </div>
