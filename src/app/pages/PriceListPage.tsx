@@ -218,9 +218,9 @@ export default function PriceListPage() {
             <div className="text-center mb-12">
             <h2
                 style={{
-                  fontSize: "25px",
-                  fontWeight: 500,
-                  color: "#111827",
+                  fontSize: "28px",
+                  fontWeight: 550,
+                  color: "#a80707",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
